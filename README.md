@@ -1,5 +1,5 @@
 # P5-MyBlog
-Cinto proyecto Bootcamp. Un Blog de fotogrfías.
+Cinto proyecto del Bootcamp. Un Blog de fotogrfías.
 
 Описание файла editdescription.php
 $data = file_get_contents('php://input');: Эта строка получает данные из тела запроса, отправленного на сервер. php://input - это поток, который позволяет получить данные запроса POST.
