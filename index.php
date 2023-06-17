@@ -15,8 +15,9 @@
         <li><a href="#about"><img src="logo.png" alt="Logo" class="logo">About Me</a></li>
         <li><a href="#gallery">Gallery</a></li>
         <li><a href="#admin">Admin</a></li>
-        <li><a href="https://www.instagram.com"><img src="img/iconInst.png" alt="Instagram" class="icon"></a></li>
-        <li><a href="https://www.youtube.com"><img src="img/iconYT.png" alt="YouTube" class="icon"></a></li>
+        <li><a href="https://www.instagram.com/slavafit2/" target = "_blank"><img src="img/iconInst.png" alt="Instagram" class="icon"></a></li>
+        <li><a href="https://www.youtube.com/channel/UCtyX9LdmcDRBqdcpru1K0hQ" target = "_blank"><img src="img/iconYT.png" alt="YouTube" class="icon"></a></li>
+        <li><a href="https://www.tiktok.com/@slavafit49" target = "_blank"><img src="img/iconTT.png" alt="Tiktok" class="icon"></a></li>
       </ul>
     </nav>
   </header>
