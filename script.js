@@ -1,16 +1,28 @@
-// Добавляем событие загрузки страницы для установки стартовой страницы
   window.addEventListener('load', function() {
+  // Добавляем событие загрузки страницы для установки стартовой страницы
   window.location.hash = '#gallery';
-});
-    
-window.addEventListener('load', function() {
   // Загрузка контента на основе хэша в URL
   function loadContent() {
     const hash = window.location.hash.slice(1);
     const content = document.getElementById('content');
     
     if (hash === 'about') {
-      content.innerHTML = '<h1>About Me</h1><p>This is the About Me page content.</p>';
+      // content.innerHTML = '<h1>About Me</h1><p>This is the About Me page content.</p>';
+      content.innerHTML = `
+      <section class="about-section">
+      <h2>About Me</h2>
+      <div class="author-info">
+        <img src="img/My sons and me.jpg" alt="Author Photo" class="author-photo">
+        <div class="author-details">
+          <h3>Viacheslav Fitlin</h3>
+          <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean lobortis, ligula ut venenatis ultrices, quam eros vulputate risus, a feugiat nibh dui a enim. Curabitur pulvinar varius tortor, non lacinia nibh consequat sit amet. Nulla venenatis faucibus dolor, et vestibulum nisi facilisis sed. Nullam vitae gravida turpis. In eu tristique nibh. Phasellus efficitur pellentesque purus, sit amet suscipit sem rhoncus at.
+          </p>
+        </div>
+      </div>
+    </section>
+    `;
+
     } else if (hash === 'gallery') {
       loadGallery();
     } else if (hash === 'admin') {
@@ -32,9 +44,10 @@ window.addEventListener('load', function() {
       if (xhr.status === 200) {
         const galleryData = JSON.parse(xhr.responseText);
         const content = document.getElementById('content');
-        
         let galleryHTML = '<h1>Gallery</h1>';
-        for (let i = 0; i < galleryData.length; i++) {
+        // for (let i = 0; i < galleryData.length; i++) {
+        // Изменяем цикл для обратного порядка
+            for (let i = galleryData.length - 1; i >= 0; i--) {
           const photo = galleryData[i];
           galleryHTML += `<div class="photo"><img src="${photo.image}" alt="${photo.description}"><p>${photo.description}</p></div>`;
         }
@@ -210,11 +223,11 @@ window.deletePhoto = function(index) {
     return false;
   }
   
-  // Выход из системы
-  function logout() {
-    localStorage.setItem('loggedIn', 'false');
-    window.location.hash = '';
-  }
+  // // Выход из системы
+  // function logout() {
+  //   localStorage.setItem('loggedIn', 'false');
+  //   window.location.hash = '';
+  // }
   
   // Обработка изменений хэша в URL
   window.addEventListener('hashchange', loadContent);
@@ -223,62 +236,32 @@ window.deletePhoto = function(index) {
   loadContent();
 });
 
-// Загрузка страницы с галереей
-function loadGalleryPage() {
-  const xhr = new XMLHttpRequest();
-  xhr.open('GET', 'gallery.json', true);
-  xhr.onload = function() {
-    if (xhr.status === 200) {
-      const galleryData = JSON.parse(xhr.responseText);
-      const content = document.getElementById('content');
-      
-      let galleryHTML = '<h2>Gallery</h2>';
-      galleryHTML += '<div class="gallery-row">';
-      
-      for (let i = 0; i < galleryData.length; i++) {
-        const photo = galleryData[i];
-        galleryHTML += `
-          <div class="photo" onclick="openPopup('${photo.image}', '${photo.description}')">
-            <img src="${photo.image}" alt="${photo.description}">
-            <p>${photo.description}</p>
-          </div>
-        `;
-      }
-      
-      galleryHTML += '</div>';
-      
-      content.innerHTML = galleryHTML;
-    }
-  };
-  xhr.send();
-}
-
 // Открытие всплывающего окна с увеличенным фото
 window.openPopup = function(imageSrc, description) {
   const popup = document.createElement('div');
   popup.classList.add('popup');
-  
+
   const popupContent = document.createElement('div');
   popupContent.classList.add('popup-content');
-  
+
   const image = document.createElement('img');
   image.src = imageSrc;
-  
+
   const caption = document.createElement('p');
   caption.textContent = description;
-  
+
   popupContent.appendChild(image);
   popupContent.appendChild(caption);
   popup.appendChild(popupContent);
-  
+
   popup.addEventListener('click', function(e) {
     if (e.target === popup) {
       closePopup();
     }
   });
-  
+
   document.body.appendChild(popup);
-  
+
   // Блокируем скроллинг фона при открытом всплывающем окне
   document.body.style.overflow = 'hidden';
 }
@@ -289,7 +272,7 @@ window.closePopup = function() {
   if (popup) {
     popup.parentNode.removeChild(popup);
   }
-  
+
   // Разблокируем скроллинг фона
   document.body.style.overflow = 'auto';
 }
@@ -305,3 +288,37 @@ window.addEventListener('hashchange', function() {
     // Добавьте обработку других страниц, если необходимо
   }
 });
+
+// Загрузка страницы с галереей
+function loadGalleryPage() {
+  const xhr = new XMLHttpRequest();
+  xhr.open('GET', 'gallery.json', true);
+  xhr.onload = function() {
+    if (xhr.status === 200) {
+      const galleryData = JSON.parse(xhr.responseText);
+      const content = document.getElementById('content');
+      
+      let galleryHTML = '<h2>Gallery</h2>';
+      galleryHTML += '<div class="gallery-row">';
+
+            // Изменяем цикл для обратного порядка
+      for (let i = galleryData.length - 1; i >= 0; i--) {
+        const photo = galleryData[i];
+        galleryHTML += `
+          <div class="photo" onclick="openPopup('${photo.image}', '${photo.description}')">
+            <img src="${photo.image}" alt="${photo.description}">
+            <p>${photo.description}</p>
+          </div>
+        `;
+      }
+
+      galleryHTML += '</div>';
+      
+      content.innerHTML = galleryHTML;
+    }
+  };
+  xhr.send();
+}
+
+// Вызов функции для загрузки галереи и назначения обработчиков событий
+loadGalleryPage();
