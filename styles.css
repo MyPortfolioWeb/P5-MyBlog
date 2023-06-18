@@ -5,15 +5,58 @@ body {
   }
   
   header {
-    background-color: #7c7b7b;;
+    background-color: #97c3d1;;
     color: #fff;
     padding: 10px;
+        /*Aplicamos el display flex*/
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
   }
   
   p { 
+    margin: 2px;  
     font-family: Caveat; 
     font-size: 1.5em;
   }
+
+  .icon {
+    width: 30px;
+    height: 30px;
+    margin-right: 5px;
+  }
+
+  .menu a {
+    color: black;
+    text-transform: uppercase;
+    text-decoration: none;
+    /*0 px de arriba y de izquierda y derecha de 10 px*/
+    padding: 0 10px;
+    transition: 0.4s;
+}
+
+.show-menu,
+.hide-menu {
+    font-size: 30px;
+    cursor: pointer;
+    display: none;
+    transition: 0.4s;
+}
+
+/* Otras de las opciones que nos da el flex box es que podemos poner un orden */
+.show-menu {
+    order: 1;
+}
+
+.menu a:hover,
+.show-menu a:hover,
+.hide-menu a:hover {
+    color: #FDFEFE;
+}
+
+#check {
+    display: none;
+}
 
   nav ul {
     list-style: none;
@@ -32,13 +75,15 @@ body {
     text-decoration: none;
   }
   
-  nav .logo {
-    width: 30px;
-    height: 30px;
+  .logo {
+    width: 80px;
+    height: 60px;
     margin-right: 5px;
+      text-transform: uppercase;
   }
-  
+
   main {
+    background-color: #e4e3e3;
     padding: 20px;
     text-align: center;
   }
@@ -49,6 +94,12 @@ body {
     padding: 10px;
     margin-right: 20px;
     text-align: center;
+   }
+
+  .footer div {
+    color: #f80303;
+    text-align: right;
+    font-size: 10px;
   }
   
   .photo {
@@ -58,6 +109,7 @@ body {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
     padding: 10px;
     border-radius: 10px;
+    text-align: left;
   }
   
   .photo img {
@@ -74,11 +126,11 @@ body {
   
   .gallery-row .photo {
     flex: 0 0 50%;
-    text-align: center;
+    text-align: left;
   }
   
   .gallery-row .photo p {
-    font-family: 'Caveat', cursive;
+    font-family: Caveat;
     font-size: 2rem;
   }
   
@@ -93,8 +145,8 @@ body {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
+  width: 80%;
+  height: 80%;
   background-color: rgba(0, 0, 0, 0.8);
   display: flex;
   justify-content: center;
@@ -127,14 +179,56 @@ body {
 }
 
 
-  @media only screen and (max-width: 600px) {
-    nav ul li {
-      display: block;
-      margin: 10px 0;
-    }
-  
-    .photo img {
-      max-width: 100%;
-    }
+/* Responsive */
+@media(max-width:768px) {
+  nav ul li {
+    display: block;
+    margin: 10px 0;
   }
-  
+
+  .photo img {
+    max-width: 100%;
+  }
+
+  /* HEADER */
+  .show-menu,
+  .hide-menu {
+      display: block;
+  }
+
+  .menu {
+      position: fixed;  
+      width: 100%;
+      /* height: 100vh;       */
+      height: 10vh;
+      background: #AED6F1;
+      right: -100%;
+      top: 0;
+      text-align: center;
+      /* Arriba y abajo 100 px y 0 izquierda y derecha */
+      padding: 100px 0px;
+      /* Para que si agregemos otros elemento no se pisen agregamos un z-index */
+      z-index: 100;
+      transition: 0.8s;
+  }
+
+  /* Configurar los enlaces */
+  .menu a {
+      /* Мы заставляем их стоять в колонне */
+      display: block;
+      /* Чтоб немного разошлись */
+      padding: 10px;
+  }
+
+  .hide-menu {
+      position: absolute;
+      top: 30px;
+      right: 40px;
+  }
+
+  /* Используем псевдо Селектор (При проверке галочки)*/
+  #check:checked~.menu {
+      right: 0;
+  }
+
+}

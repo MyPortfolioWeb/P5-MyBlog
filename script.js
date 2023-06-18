@@ -1,4 +1,4 @@
-  window.addEventListener('load', function() {
+window.addEventListener('load', function() {
   // Добавляем событие загрузки страницы для установки стартовой страницы
   window.location.hash = '#gallery';
   // Загрузка контента на основе хэша в URL
@@ -13,8 +13,8 @@
       <h2>About Me</h2>
       <div class="author-info">
         <img src="img/My sons and me.jpg" alt="Author Photo" class="author-photo">
+        <h3>Viacheslav Fitlin</h3>
         <div class="author-details">
-          <h3>Viacheslav Fitlin</h3>
           <p>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean lobortis, ligula ut venenatis ultrices, quam eros vulputate risus, a feugiat nibh dui a enim. Curabitur pulvinar varius tortor, non lacinia nibh consequat sit amet. Nulla venenatis faucibus dolor, et vestibulum nisi facilisis sed. Nullam vitae gravida turpis. In eu tristique nibh. Phasellus efficitur pellentesque purus, sit amet suscipit sem rhoncus at.
           </p>
@@ -49,7 +49,11 @@
         // Изменяем цикл для обратного порядка
             for (let i = galleryData.length - 1; i >= 0; i--) {
           const photo = galleryData[i];
-          galleryHTML += `<div class="photo"><img src="${photo.image}" alt="${photo.description}"><p>${photo.description}</p></div>`;
+          galleryHTML += `<div class="photo">
+          <img src="${photo.image}" alt="${photo.description}">
+          <h3>${photo.name}</h3>
+          <p>${photo.description}</p>
+          </div>`;
         }
         
         content.innerHTML = galleryHTML;
@@ -65,8 +69,9 @@
       <h1>Admin</h1>
       <form id="addPhotoForm">
         <input type="file" name="image" accept="image/*" required>
+        <input type="text" name="name" placeholder="Name" required>
         <input type="text" name="description" placeholder="Description" required>
-        <button type="submit">Add Photo</button>
+        <button type="submit">Add new post</button>
       </form>
       <div id="photoList"></div>
     `;
@@ -77,6 +82,7 @@
       
       const imageInput = addPhotoForm.elements.image;
       const descriptionInput = addPhotoForm.elements.description;
+      const imagenameInput = addPhotoForm.elements.name;
       
       const file = imageInput.files[0];
       
@@ -87,12 +93,14 @@
           
           const newPhoto = {
             image: imageBase64,
-            description: descriptionInput.value
+            description: descriptionInput.value,
+            name: imagenameInput.value
           };
           
           savePhoto(newPhoto);
           imageInput.value = '';
           descriptionInput.value = '';
+          imagenameInput.value = '';
         };
         reader.readAsDataURL(file);
       }
@@ -123,15 +131,17 @@
         const galleryData = JSON.parse(xhr.responseText);
         const photoList = document.getElementById('photoList');
         
-        let photoListHTML = '<h2>Photo List</h2>';
+        let photoListHTML = '<h2>Post list</h2>';
         for (let i = 0; i < galleryData.length; i++) {
           const photo = galleryData[i];
           photoListHTML += `
           <div class="photo">
           <img src="${photo.image}" alt="${photo.description}">
+          <h2>${photo.name}</h2>
           <p>${photo.description}</p>
-          <button onclick="editDescription(${i})">Edit</button>
-          <button onclick="deletePhoto(${i})">Delete</button>
+          <button onclick="editName(${i})">Edit Name</button>
+          <button onclick="editDescription(${i})">Edit Description</button>
+          <button onclick="deletePhoto(${i})">Delete post</button>
           </div>
           `;
         }
@@ -142,39 +152,55 @@
     xhr.send();
   }
   
-// Редактирование описания фото
-window.editDescription = function(index) {
-  const description = prompt("Enter the new description:");
-  if (description !== null) {
+  // Редактирование описания фото
+  window.editDescription = function(index) {
+    const description = prompt("Enter the new description:");
+    if (description !== null) {
+      const xhr = new XMLHttpRequest();
+      xhr.open('POST', 'editdescription.php', true);
+      xhr.setRequestHeader('Content-Type', 'application/json');
+      xhr.onload = function() {
+        if (xhr.status === 200) {
+          loadPhotoList();
+        }
+      };
+      xhr.send(JSON.stringify({ index: index, description: description}));
+    }
+  }
+  
+  // Редактирование имени фото
+  window.editName = function(index) {
+    const name = prompt("Enter the new name:");
+    if (name !== null){
+      const xhr = new XMLHttpRequest();
+      xhr.open('POST', 'editname.php', true);
+      xhr.setRequestHeader('Content-Type', 'application/json');
+      xhr.onload = function() {
+        if (xhr.status === 200) {
+          loadPhotoList();
+        }
+      };
+      xhr.send(JSON.stringify({ index: index, name: name }));
+    }
+  }
+
+  // Удаление фото на странице Admin
+  window.deletePhoto = function(index) {
+    const confirmDelete = confirm("Are you sure you want to delete this post?");
+    if (!confirmDelete) {
+      return;
+    }
+    
     const xhr = new XMLHttpRequest();
-    xhr.open('POST', 'editdescription.php', true);
+    xhr.open('POST', 'deletephoto.php', true);
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.onload = function() {
       if (xhr.status === 200) {
         loadPhotoList();
       }
     };
-    xhr.send(JSON.stringify({ index: index, description: description }));
+    xhr.send(JSON.stringify({ index: index }));
   }
-}
-  
-// Удаление фото на странице Admin
-window.deletePhoto = function(index) {
-  const confirmDelete = confirm("Are you sure you want to delete this photo?");
-  if (!confirmDelete) {
-    return;
-  }
-  
-  const xhr = new XMLHttpRequest();
-  xhr.open('POST', 'deletephoto.php', true);
-  xhr.setRequestHeader('Content-Type', 'application/json');
-  xhr.onload = function() {
-    if (xhr.status === 200) {
-      loadPhotoList();
-    }
-  };
-  xhr.send(JSON.stringify({ index: index }));
-}
 
   
   // Показать форму входа
@@ -223,11 +249,11 @@ window.deletePhoto = function(index) {
     return false;
   }
   
-  // // Выход из системы
-  // function logout() {
-  //   localStorage.setItem('loggedIn', 'false');
-  //   window.location.hash = '';
-  // }
+  // Выход из системы
+  function logout() {
+    localStorage.setItem('loggedIn', 'false');
+    window.location.hash = '';
+  }
   
   // Обработка изменений хэша в URL
   window.addEventListener('hashchange', loadContent);
@@ -277,17 +303,17 @@ window.closePopup = function() {
   document.body.style.overflow = 'auto';
 }
 
-// Обработка события изменения хэша в URL
-window.addEventListener('hashchange', function() {
-  const hash = window.location.hash.substr(1);
+// // Обработка события изменения хэша в URL
+// window.addEventListener('hashchange', function() {
+//   const hash = window.location.hash.substr(1);
   
-  switch (hash) {
-    case 'gallery':
-      loadGalleryPage();
-      break;
-    // Добавьте обработку других страниц, если необходимо
-  }
-});
+//   switch (hash) {
+//     case 'gallery':
+//       loadGalleryPage();
+//       break;
+//     // Добавьте обработку других страниц, если необходимо
+//   }
+// });
 
 // Загрузка страницы с галереей
 function loadGalleryPage() {
@@ -307,6 +333,7 @@ function loadGalleryPage() {
         galleryHTML += `
           <div class="photo" onclick="openPopup('${photo.image}', '${photo.description}')">
             <img src="${photo.image}" alt="${photo.description}">
+            <h2>${photo.name}</h2>
             <p>${photo.description}</p>
           </div>
         `;
