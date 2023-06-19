@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>My Single Page Application</title>
+  <title>Blog by SlavaFit</title>
   <link rel="stylesheet" type="text/css" href="styles.css">
-  <link rel="stylesheet" type="text/css" href="popup.css">
   <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Caveat">
 </head>
 <body>
   <header>
-    <img src="img/logo2.png" alt="Logo" class="logo">
-    <!-- Добавлено окно для поиска -->
+    <div class="header-container">
+      <img src="img/logo2.png" alt="Logo" class="logo">
+    </div>
     <div class="search-box">
-      <input type="text" placeholder="Поиск">
-      <button type="submit">Найти</button>
+      <input type="text" placeholder="Search">
+      <button type="submit">Search</button>
     </div>
     <!-- Конец окна для поиска -->
     <input type="checkbox" id="check">

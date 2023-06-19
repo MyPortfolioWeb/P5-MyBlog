@@ -59,9 +59,9 @@ body {
 }
 
   nav ul {
-    list-style: none;
+    list-style: none;   /*убираем маркеры списка*/
     padding: 0;
-    margin: 0;
+    margin: 0;  /*убираем верхнее и нижнее поле, равное 1em*/
     display: flex;
     align-items: center;
   }
@@ -72,15 +72,28 @@ body {
   
   nav ul li a {
     color: #fff;
-    text-decoration: none;
+    text-decoration: none;    /*убираем подчеркивание текста ссылок*/
   }
   
-  .logo {
-    width: 80px;
-    height: 60px;
-    margin-right: 5px;
-      text-transform: uppercase;
+  .header-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
   }
+
+  .logo {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(10%, -30%);
+    width: 10pv;
+    height:80px;
+  }
+  .search-box {
+    border-radius: 10px;
+  }
+
 
   main {
     background-color: #e4e3e3;
@@ -139,42 +152,43 @@ body {
     margin: 5px;
   }
 
-  /* popup */
-
+/*popup*/
 .popup {
   position: fixed;
   top: 0;
   left: 0;
-  width: 80%;
-  height: 80%;
+  width: 100%;
+  height: 100%;
   background-color: rgba(0, 0, 0, 0.8);
   display: flex;
-  justify-content: center;
   align-items: center;
-  z-index: 9999;
+  justify-content: center;
 }
 
 .popup-content {
-  background-color: #fff;
-  padding: 20px;
-  text-align: center;
-  max-width: 80%;
+  max-width: 800px;
   max-height: 80%;
   overflow: auto;
+  background-color: #fff;
+  padding: 20px;
+  position: relative;
+  border-radius: 10px;
 }
 
-.popup img {
+.popup-content img {
   max-width: 100%;
-  max-height: 100%;
-}
-
-.popup p {
-  margin-top: 10px;
-}
-
-#close-popup {
+  height: auto;
   display: block;
-  margin-top: 20px;
+  margin: 0 auto;
+}
+
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 5px 10px;
+  background-color: #fff;
+  border: none;
   cursor: pointer;
 }
 
@@ -206,13 +220,13 @@ body {
       top: 0;
       text-align: center;
       /* Arriba y abajo 100 px y 0 izquierda y derecha */
-      padding: 100px 0px;
+      /* padding: 50px 0px; */
       /* Para que si agregemos otros elemento no se pisen agregamos un z-index */
       z-index: 100;
       transition: 0.8s;
+      /* opacity: 0.9; */
   }
 
-  /* Configurar los enlaces */
   .menu a {
       /* Мы заставляем их стоять в колонне */
       display: block;
