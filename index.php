@@ -11,15 +11,14 @@
       <img src="img/logo2.png" alt="Logo" class="logo">
     </div>
     <div class="search-box">
-      <input type="text" placeholder="Search">
-      <button type="submit">Search</button>
+      <input type="text" placeholder="Escribe aquí">
+      <button type="submit">Buscar</button>
     </div>
     <!-- Конец окна для поиска -->
     <input type="checkbox" id="check">
     <label for="check" class="show-menu">&#8801</label>
     <nav class="menu">
       <ul>
-        <!-- <a href="#"> <img src="logo.png" alt="Logo" class="logo"></a> -->
         <li><a href="#about">About Me</a></li>
         <li><a href="#gallery">Gallery</a></li>
         <li><a href="#admin">Admin</a></li>
@@ -30,12 +29,16 @@
       <label for="check" class="hide-menu">&#215</label>
     </nav>
   </header>
+
+  <div id="progress_line"></div>
   
   <main id="content"></main>
+
+  <div class="btn-up btn-up_hide"></div>
   
   <footer class="footer">
-    <p1>Grupo Mérida Coders &trade; SlavaFit &copy;        2023</p1><br>
-    <div>Любое копирование материалов с сайта без согласия автора - запрещено.</div>
+    <p1>Grupo Mérida Coders &trade; SlavaFit &copy; 2023</p1><br>
+    <div>Queda prohibida la copia de material de este sitio sin el consentimiento del autor.</div>
   </footer>
 
   <script src="script.js"></script>

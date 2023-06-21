@@ -1,21 +1,28 @@
 window.addEventListener('load', function () {
   // Добавляем событие загрузки страницы для установки стартовой страницы
   window.location.hash = '#gallery';
+
   // Загрузка контента на основе хэша в URL
   function loadContent() {
     const hash = window.location.hash.slice(1);
     const content = document.getElementById('content');
-
     if (hash === 'about') {
       content.innerHTML = `
       <section class="about-section">
-      <h2>About Me</h2>
+      <h2>Bienvenido, soy Slava y me gustaría enseñarte algo...</h2>
       <div class="author-info">
-        <img src="img/My sons and me.jpg" alt="Author Photo" class="author-photo">
-        <h3>Viacheslav Fitlin</h3>
+        <img src="img/mi photo.png" alt="Author Photo" class="author-photo">
         <div class="author-details">
           <p>
-          Путешествия — это искусство обнаружения неизведанных миров и ощущение свободы, которое они приносят. Когда мы открываем двери в новые места, мы встречаем невероятные приключения, неповторимую красоту и глубокую историю. И в этом духе, я приглашаю вас отправиться в захватывающее путешествие в экстремадурскую провинцию Испании.
+          ¿Has experimentado alguna vez la sensación de descubrir mundos desconocidos y la libertad que traen consigo? Cuando abrimos las puertas a nuevos lugares, nos encontramos con aventuras increíbles, belleza incomparable y una historia profunda. En ese espíritu, te invito a embarcarte en un emocionante viaje a la provincia de Extremadura, ubicada en el suroeste de España.<br>
+
+Extremadura es una joya que muchos aún desconocen. Adéntrate valientemente en sus antiguas calles, donde cada piedra está impregnada de historia y cultura. Te esperan castillos, ruinas misteriosas y paisajes pintorescos que inspirarán tu alma.<br>
+
+¿Y qué hay de los descubrimientos culinarios? Extremadura es famosa por su gastronomía, y no puedes dejar de probar sus exquisitos platos. Los deliciosos quesos, el famoso jamón ibérico y los vinos locales son auténticos manjares.<br>
+
+Los viajes a Extremadura despertarán en ti la sed de descubrimiento y aventura. Sin duda, tendrás que superar tus límites, pero son precisamente esos momentos los que dejan impresiones inolvidables en la memoria. Abre tu corazón y tu alma a Extremadura y descubrirás una nueva profundidad e inspiración en tu vida.<br>
+
+¡Vamos en busca de nuevos mundos y revelaciones en España!
           </p>
         </div>
       </div>
@@ -35,7 +42,7 @@ window.addEventListener('load', function () {
     }
   }
 
-  // Загрузка галереи из файла JSON
+  // Загрузка страницы с галереей из файла JSON
   function loadGallery() {
     const xhr = new XMLHttpRequest();
     xhr.open('GET', 'gallery.json', true);
@@ -43,16 +50,19 @@ window.addEventListener('load', function () {
       if (xhr.status === 200) {
         const galleryData = JSON.parse(xhr.responseText);
         const content = document.getElementById('content');
+        
         let galleryHTML = '<h1>Gallery</h1>';
+        galleryHTML += '<div class="gallery-row">';
         // for (let i = 0; i < galleryData.length; i++) {
         // Изменяем цикл для обратного порядка
         for (let i = galleryData.length - 1; i >= 0; i--) {
           const photo = galleryData[i];
-          galleryHTML += `<div class="photo">
-          <img src="${photo.image}" alt="${photo.description}">
-          <h3>${photo.name}</h3>
-          <p>${photo.description}</p>
-          </div>`;
+          galleryHTML += `
+            <div class="photo">
+            <img src="${photo.image}" alt="${photo.name}">
+            <h2>${photo.name}</h2>
+             <p>${photo.description}</p>
+            </div>`;
         }
 
         content.innerHTML = galleryHTML;
@@ -80,7 +90,7 @@ window.addEventListener('load', function () {
     // Блокировка прокрутки страницы
     document.body.style.overflow = 'hidden';
 
-    // Закрытие всплывающего окна при клике на кнопку Close
+    // Закрытие всплывающего окна при клике на Close
     const closeBtn = popup.querySelector('.close-btn');
     closeBtn.addEventListener('click', function () {
       document.body.removeChild(popup);
@@ -172,13 +182,14 @@ window.addEventListener('load', function () {
         const galleryData = JSON.parse(xhr.responseText);
         const photoList = document.getElementById('photoList');
         let photoListHTML = '<h2>Post list</h2>';
+        photoListHTML += '<div class="gallery-row">';
         // for (let i = 0; i < galleryData.length; i++) {
         // Изменяем цикл для обратного порядка
         for (let i = galleryData.length - 1; i >= 0; i--) {
           const photo = galleryData[i];
           photoListHTML += `
           <div class="photo">
-          <img src="${photo.image}" alt="${photo.description}">
+          <img src="${photo.image}" alt="${photo.name}">
           <h2>${photo.name}</h2>
           <p>${photo.description}</p>
           <button onclick="editName(${i})">Edit Name</button>
@@ -303,37 +314,83 @@ window.addEventListener('load', function () {
   loadContent();
 });
 
-// Загрузка страницы с галереей
-function loadGalleryPage() {
-  const xhr = new XMLHttpRequest();
-  xhr.open('GET', 'gallery.json', true);
-  xhr.onload = function () {
-    if (xhr.status === 200) {
-      const galleryData = JSON.parse(xhr.responseText);
-      const content = document.getElementById('content');
+// // Загрузка страницы с галереей
+// function loadGalleryPage() {
+//   const xhr = new XMLHttpRequest();
+//   xhr.open('GET', 'gallery.json', true);
+//   xhr.onload = function () {
+//     if (xhr.status === 200) {
+//       const galleryData = JSON.parse(xhr.responseText);
+//       const content = document.getElementById('content');
 
-      let galleryHTML = '<h2>Gallery</h2>';
-      galleryHTML += '<div class="gallery-row">';
+//       let galleryHTML = '<h2>Gallery</h2>';
+//       galleryHTML += '<div class="gallery-row">';
 
-      // Изменяем цикл для обратного порядка
-      for (let i = galleryData.length - 1; i >= 0; i--) {
-        const photo = galleryData[i];
-        galleryHTML += `
-          <div class="photo" onclick="openPopup('${photo.image}', '${photo.description}')">
-            <img src="${photo.image}" alt="${photo.description}">
-            <h2>${photo.name}</h2>
-            <p>${photo.description}</p>
-          </div>
-        `;
-      }
+//       // Изменяем цикл для обратного порядка
+//       for (let i = galleryData.length - 1; i >= 0; i--) {
+//         const photo = galleryData[i];
+//         galleryHTML += `
+//           <div class="gallery-row" onclick="openPopup('${photo.image}', '${photo.description}')">
+//             <img src="${photo.image}" alt="${photo.name}">
+//             <h2>${photo.name}</h2>
+//             <p>${photo.description}</p>
+//           </div>
+//         `;
+//       }
 
-      galleryHTML += '</div>';
+//       galleryHTML += '</div>';
 
-      content.innerHTML = galleryHTML;
-    }
-  };
-  xhr.send();
-}
+//       content.innerHTML = galleryHTML;
+//     }
+//   };
+//   xhr.send();
+// }
 
 // Вызов функции для загрузки галереи и назначения обработчиков событий
-loadGalleryPage();
+// loadGallery();
+
+// Кнопка вверх для прокрутки страницы сайта в начало
+  const btnUp = {
+    el: document.querySelector('.btn-up'),
+    show() {
+      // удалим у кнопки класс btn-up_hide
+      this.el.classList.remove('btn-up_hide');
+    },
+    hide() {
+      // добавим к кнопке класс btn-up_hide
+      this.el.classList.add('btn-up_hide');
+    },
+    addEventListener() {
+      // при прокрутке содержимого страницы
+      window.addEventListener('scroll', () => {
+        // определяем величину прокрутки
+        const scrollY = window.scrollY || document.documentElement.scrollTop;
+        // если страница прокручена больше чем на 400px, то делаем кнопку видимой, иначе скрываем
+        scrollY > 400 ? this.show() : this.hide();
+      });
+      // при нажатии на кнопку .btn-up
+      document.querySelector('.btn-up').onclick = () => {
+        // переместим в начало страницы
+        window.scrollTo({
+          top: 0,
+          left: 0,
+          behavior: 'smooth'
+        });
+      }
+    }
+  }
+
+  btnUp.addEventListener();
+
+//прогресс бар
+  let line = document.getElementById('progress_line');
+  window.addEventListener('scroll', progressBar);
+        
+  function progressBar(e) {
+    let windowScroll = document.body.scrollTop || 
+    document.documentElement.scrollTop;
+    let windowHeight = document.documentElement.scrollHeight - 
+    document.documentElement.clientHeight; 
+    let width_progress_line = windowScroll / windowHeight * 100;
+    line.style.width = width_progress_line + '%';
+  }
