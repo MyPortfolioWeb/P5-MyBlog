@@ -3,6 +3,7 @@
 <head>
   <title>Blog by SlavaFit</title>
   <link rel="stylesheet" type="text/css" href="styles.css">
+  <link rel="icon" href="img/logo2.png" type="image/x-icon">
   <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Caveat">
 </head>
 <body>
@@ -19,8 +20,8 @@
     <label for="check" class="show-menu">&#8801</label>
     <nav class="menu">
       <ul>
-        <li><a href="#about">About Me</a></li>
-        <li><a href="#gallery">Gallery</a></li>
+        <li><a href="#about">Sobre mí</a></li>
+        <li><a href="#gallery">Galería</a></li>
         <li><a href="#admin">Admin</a></li>
         <li><a href="https://www.instagram.com/slavafit2/" target = "_blank"><img src="img/iconInst.png" alt="Instagram" class="icon"></a></li>
         <li><a href="https://www.youtube.com/channel/UCtyX9LdmcDRBqdcpru1K0hQ" target = "_blank"><img src="img/iconYT.png" alt="YouTube" class="icon"></a></li>

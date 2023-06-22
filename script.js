@@ -1,6 +1,6 @@
 window.addEventListener('load', function () {
   // Добавляем событие загрузки страницы для установки стартовой страницы
-  window.location.hash = '#gallery';
+  window.location.hash = '#about';
 
   // Загрузка контента на основе хэша в URL
   function loadContent() {
@@ -16,18 +16,18 @@ window.addEventListener('load', function () {
           <p>
           ¿Has experimentado alguna vez la sensación de descubrir mundos desconocidos y la libertad que traen consigo? Cuando abrimos las puertas a nuevos lugares, nos encontramos con aventuras increíbles, belleza incomparable y una historia profunda. En ese espíritu, te invito a embarcarte en un emocionante viaje a la provincia de Extremadura, ubicada en el suroeste de España.<br>
 
-Extremadura es una joya que muchos aún desconocen. Adéntrate valientemente en sus antiguas calles, donde cada piedra está impregnada de historia y cultura. Te esperan castillos, ruinas misteriosas y paisajes pintorescos que inspirarán tu alma.<br>
+    Extremadura es una joya que muchos aún desconocen. Adéntrate valientemente en sus antiguas calles, donde cada piedra está impregnada de historia y cultura. Te esperan castillos, ruinas misteriosas y paisajes pintorescos que inspirarán tu alma.<br>
 
-¿Y qué hay de los descubrimientos culinarios? Extremadura es famosa por su gastronomía, y no puedes dejar de probar sus exquisitos platos. Los deliciosos quesos, el famoso jamón ibérico y los vinos locales son auténticos manjares.<br>
+    ¿Y qué hay de los descubrimientos culinarios? Extremadura es famosa por su gastronomía, y no puedes dejar de probar sus exquisitos platos. Los deliciosos quesos, el famoso jamón ibérico y los vinos locales son auténticos manjares.<br>
 
-Los viajes a Extremadura despertarán en ti la sed de descubrimiento y aventura. Sin duda, tendrás que superar tus límites, pero son precisamente esos momentos los que dejan impresiones inolvidables en la memoria. Abre tu corazón y tu alma a Extremadura y descubrirás una nueva profundidad e inspiración en tu vida.<br>
+    Los viajes a Extremadura despertarán en ti la sed de descubrimiento y aventura. Sin duda, tendrás que superar tus límites, pero son precisamente esos momentos los que dejan impresiones inolvidables en la memoria. Abre tu corazón y tu alma a Extremadura y descubrirás una nueva profundidad e inspiración en tu vida.<br>
 
-¡Vamos en busca de nuevos mundos y revelaciones en España!
-          </p>
+    ¡Vamos a buscar de nuevos mundos y revelaciones en España!
+            </p>
+          </div>
         </div>
-      </div>
-    </section>
-    `;
+      </section>
+      `;
 
     } else if (hash === 'gallery') {
       loadGallery();
@@ -51,7 +51,7 @@ Los viajes a Extremadura despertarán en ti la sed de descubrimiento y aventura.
         const galleryData = JSON.parse(xhr.responseText);
         const content = document.getElementById('content');
         
-        let galleryHTML = '<h1>Gallery</h1>';
+        let galleryHTML = '<h1>Galería</h1>';
         galleryHTML += '<div class="gallery-row">';
         // for (let i = 0; i < galleryData.length; i++) {
         // Изменяем цикл для обратного порядка
@@ -60,7 +60,7 @@ Los viajes a Extremadura despertarán en ti la sed de descubrimiento y aventura.
           galleryHTML += `
             <div class="photo">
             <img src="${photo.image}" alt="${photo.name}">
-            <h2>${photo.name}</h2>
+            <h3>${photo.name}</h3>
              <p>${photo.description}</p>
             </div>`;
         }
@@ -79,12 +79,14 @@ Los viajes a Extremadura despertarán en ti la sed de descubrimiento y aventura.
     // Открытие всплывающего окна. действие
   function openPopup() {
     const imageSrc = this.querySelector('img').src;
+    const imageNane = this.querySelector('img').alt;
     const popup = document.createElement('div');
     popup.classList.add('popup');
     popup.innerHTML = `
         <div class="popup-content">
           <img src="${imageSrc}" alt="Popup Image">
-          <button class="close-btn">Close</button>
+          <h3>${imageNane}</h3>
+          <button class="close-btn">Cerrar</button>
         </div>
       `;
     // Блокировка прокрутки страницы
@@ -313,41 +315,6 @@ Los viajes a Extremadura despertarán en ti la sed de descubrimiento y aventura.
   // Инициализация загрузки контента
   loadContent();
 });
-
-// // Загрузка страницы с галереей
-// function loadGalleryPage() {
-//   const xhr = new XMLHttpRequest();
-//   xhr.open('GET', 'gallery.json', true);
-//   xhr.onload = function () {
-//     if (xhr.status === 200) {
-//       const galleryData = JSON.parse(xhr.responseText);
-//       const content = document.getElementById('content');
-
-//       let galleryHTML = '<h2>Gallery</h2>';
-//       galleryHTML += '<div class="gallery-row">';
-
-//       // Изменяем цикл для обратного порядка
-//       for (let i = galleryData.length - 1; i >= 0; i--) {
-//         const photo = galleryData[i];
-//         galleryHTML += `
-//           <div class="gallery-row" onclick="openPopup('${photo.image}', '${photo.description}')">
-//             <img src="${photo.image}" alt="${photo.name}">
-//             <h2>${photo.name}</h2>
-//             <p>${photo.description}</p>
-//           </div>
-//         `;
-//       }
-
-//       galleryHTML += '</div>';
-
-//       content.innerHTML = galleryHTML;
-//     }
-//   };
-//   xhr.send();
-// }
-
-// Вызов функции для загрузки галереи и назначения обработчиков событий
-// loadGallery();
 
 // Кнопка вверх для прокрутки страницы сайта в начало
   const btnUp = {

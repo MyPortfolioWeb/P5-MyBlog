@@ -5,13 +5,14 @@ body {
   }
   
 header {
-    background-color: #97c3d1;
+  background: rgb(2,0,36);
+  background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(112,112,203,1) 0%, rgba(18,236,208,1) 92%);;
     color: #fff;
     padding: 10px;
         /*Aplicamos el display flex*/
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     position: sticky;   /* Закрепление меню 2 строчки*/
     top: 0;
   }
@@ -84,7 +85,7 @@ header {
     top: 0;
     width: 0%;
     height: 4px;
-    background: rgb(45, 24, 200);
+    background: rgb(232, 44, 27);
 }
 
   .logo {
@@ -100,6 +101,9 @@ header {
     border-radius: 10px;
   }
 
+  .about-section {
+  font-style: italic;
+  }
   .author-photo {
     max-width: 800px;
     height: auto;
@@ -109,6 +113,8 @@ header {
   .author-details p {
     /* height: 30%; */
     text-align: left;
+    font-style: italic;
+    text-indent: 25px;
   }
 
   main {
@@ -118,7 +124,8 @@ header {
   }
   
   footer {
-    background-color: #97c3d1;
+    background: rgb(2,0,36);
+    background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(112,112,203,1) 0%, rgba(18,236,208,1) 92%);
     color: #fff;
     padding: 10px;
     margin-right: 20px;
@@ -156,13 +163,18 @@ header {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
     border-radius: 10px;
     text-align: left;
+    text-align: justify;
 
+  }
+
+  .gallery-row .photo h3 {
+    font-style: italic;
   }
   
   .gallery-row .photo p {
     max-width: 100%;
     font-family: Caveat;
-    font-size: 1.6rem;
+    font-size: 1.6rem; 
   }
   
   form input,
@@ -254,6 +266,7 @@ header {
 
 /* Responsive */
 @media(max-width:768px) {
+  
   nav ul li {
     display: block;
     margin: 10px 0;
