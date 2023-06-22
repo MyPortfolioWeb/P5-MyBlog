@@ -5,45 +5,78 @@ body {
   }
   
 header {
-    /* background-color: #97c3d1; */
-
-
-    background: rgb(2,0,36);
-    background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(96,96,191,1) 0%, rgba(18,236,208,1) 92%);
+  background: rgb(2,0,36);
+  background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(112,112,203,1) 0%, rgba(18,236,208,1) 92%);;
+    color: #fff;
     padding: 10px;
-    /*Aplicamos el display flex*/
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+        /*Aplicamos el display flex*/
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     position: sticky;   /* Закрепление меню 2 строчки*/
     top: 0;
   }
-  
-  p { 
-    font-family: Caveat; 
+
+  .icon {
+    width: 30px;
+    height: 30px;
+    margin-right: 5px;
+  }
+
+  .menu a {
+    color: black;
+    text-transform: uppercase;
+    text-decoration: none;
+    /*0 px de arriba y de izquierda y derecha de 10 px*/
+    padding: 0 10px;
+    transition: 0.4s;
+}
+
+  .show-menu,
+  .hide-menu {
+      font-size: 30px;
+      cursor: pointer;
+      display: none;
+      transition: 0.4s;
+  }
+
+  /* Otras de las opciones que nos da el flex box es que podemos poner un orden */
+  .show-menu {
+      order: 1;
+  }
+
+  .menu a:hover,
+  .show-menu a:hover,
+  .hide-menu a:hover {
+      color: #FDFEFE;
+  }
+
+  #check {
+    display: none;
   }
 
   nav ul {
-    list-style: none;
+    list-style: none;   /*убираем маркеры списка*/
     padding: 0;
-    margin: 0;
+    margin: 0;  /*убираем верхнее и нижнее поле, равное 1em*/
     display: flex;
     align-items: center;
   }
   
   nav ul li {
-    margin-right: 10px;
+    margin-right: 20px;
   }
   
   nav ul li a {
     color: #fff;
-    text-decoration: none;
+    text-decoration: none;    /*убираем подчеркивание текста ссылок*/
   }
-  
-  nav .logo {
-    width: 30px;
-    height: 30px;
-    margin-right: 5px;
+
+  .header-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
   }
 
   #progress_line {
@@ -52,7 +85,7 @@ header {
     top: 0;
     width: 0%;
     height: 4px;
-    background: #fc3a3a;
+    background: rgb(232, 44, 27);
 }
 
   .logo {
@@ -60,49 +93,47 @@ header {
     top: 50%;
     left: 50%;
     transform: translate(10%, -30%);
-    width: 12vh;
-    /* height: 10pv; */
+    width: 10pv;
+    height:80px;
   }
 
   .search-box {
     border-radius: 10px;
-    margin-left: 10%;
   }
 
-  .about-section h1{
-  font-family: Caveat;
-  /* line-height: 2; */
+  .about-section {
+  font-style: italic;
   }
-
   .author-photo {
     max-width: 800px;
     height: auto;
-    border-radius: 5px;
+    /* height: 30%; */
   }
-  
+
   .author-details p {
     /* height: 30%; */
     text-align: left;
-    text-indent: 20px;
-    line-height: 1.5;
     font-style: italic;
+    text-indent: 25px;
   }
 
   main {
+    background-color: #e4e3e3;
     padding: 20px;
     text-align: center;
   }
   
   footer {
-    /* background-color: #97c3d1; */
-  background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(96,96,191,1) 0%, rgba(18,236,208,1) 92%);
+    background: rgb(2,0,36);
+    background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(112,112,203,1) 0%, rgba(18,236,208,1) 92%);
     color: #fff;
     padding: 10px;
+    margin-right: 20px;
     text-align: center;
    }
 
   .footer div {
-    color: #fcbf93;
+    color: #f80303;
     text-align: left;
     font-size: 10px;
   }
@@ -114,17 +145,16 @@ header {
   }
   
   .gallery-row .photo img {
-    width: 100%;
-    /* max-width: 100%; */
+    max-width: 100%;
     height: auto;
     display: block;
-    border-radius: 10px;
   }
 
 
 
   .gallery-row .photo {
     max-width: 100%;
+    /* width: 500px; */
     height: auto;
     flex: 0 0 40%;
     display: inline-block;
@@ -133,15 +163,18 @@ header {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
     border-radius: 10px;
     text-align: left;
+    text-align: justify;
+
+  }
+
+  .gallery-row .photo h3 {
     font-style: italic;
-    /* flex-flow: row wrap; если содержимое слишком большое убирает сниз */
   }
   
   .gallery-row .photo p {
     max-width: 100%;
     font-family: Caveat;
-    font-size: 1.3rem;
-    text-align:justify;
+    font-size: 1.6rem; 
   }
   
   form input,
@@ -167,7 +200,7 @@ header {
     max-height: 80%;
     overflow: auto;
     background-color: #fff;
-    padding: 10px;
+    padding: 20px;
     position: relative;
     border-radius: 10px;
   }
@@ -177,7 +210,6 @@ header {
     height: auto;
     display: block;
     margin: 0 auto;
-    border-radius: 10px;
   }
 
   .close-btn {
@@ -234,16 +266,13 @@ header {
 
 /* Responsive */
 @media(max-width:768px) {
+  
   nav ul li {
     display: block;
     margin: 10px 0;
   }
   .author-info img {
     max-width: 100%;
-  }
-  
-  .gallery-row .photo {
-    flex-basis: 100%;
   }
   .photo img {
     max-width: 100%;
@@ -252,7 +281,7 @@ header {
   /* HEADER */
   .show-menu,
   .hide-menu {
-  display: block;
+      display: block;
   }
 
   .menu {
@@ -264,6 +293,8 @@ header {
       right: -100%;
       top: 0;
       text-align: center;
+      /* Arriba y abajo 100 px y 0 izquierda y derecha */
+      /* padding: 50px 0px; */
       /* Para que si agregemos otros elemento no se pisen agregamos un z-index */
       z-index: 100;
       transition: 0.8s;

@@ -14,8 +14,6 @@ if ($request && isset($request->index) && isset($request->description)) {
   }
 }
 ?>
-
-
 <!-- $data = file_get_contents('php://input');: Эта строка получает данные из тела запроса, отправленного на сервер. php://input - это поток, который позволяет получить данные запроса POST.
 
 $request = json_decode($data);: Здесь данные запроса, полученные в предыдущей строке, декодируются из JSON формата в объект PHP. Функция json_decode используется для этой цели.

@@ -6,7 +6,6 @@ window.addEventListener('load', function () {
   function loadContent() {
     const hash = window.location.hash.slice(1);
     const content = document.getElementById('content');
-    
     if (hash === 'about') {
       content.innerHTML = `
       <section class="about-section">
@@ -17,20 +16,20 @@ window.addEventListener('load', function () {
           <p>
           ¿Has experimentado alguna vez la sensación de descubrir mundos desconocidos y la libertad que traen consigo? Cuando abrimos las puertas a nuevos lugares, nos encontramos con aventuras increíbles, belleza incomparable y una historia profunda. En ese espíritu, te invito a embarcarte en un emocionante viaje a la provincia de Extremadura, ubicada en el suroeste de España.<br>
 
-      Extremadura es una joya que muchos aún desconocen. Adéntrate valientemente en sus antiguas calles, donde cada piedra está impregnada de historia y cultura. Te esperan castillos, ruinas misteriosas y paisajes pintorescos que inspirarán tu alma.<br>
+    Extremadura es una joya que muchos aún desconocen. Adéntrate valientemente en sus antiguas calles, donde cada piedra está impregnada de historia y cultura. Te esperan castillos, ruinas misteriosas y paisajes pintorescos que inspirarán tu alma.<br>
 
-      ¿Y qué hay de los descubrimientos culinarios? Extremadura es famosa por su gastronomía, y no puedes dejar de probar sus exquisitos platos. Los deliciosos quesos, el famoso jamón ibérico y los vinos locales son auténticos manjares.<br>
+    ¿Y qué hay de los descubrimientos culinarios? Extremadura es famosa por su gastronomía, y no puedes dejar de probar sus exquisitos platos. Los deliciosos quesos, el famoso jamón ibérico y los vinos locales son auténticos manjares.<br>
 
-      Los viajes a Extremadura despertarán en ti la sed de descubrimiento y aventura. Sin duda, tendrás que superar tus límites, pero son precisamente esos momentos los que dejan impresiones inolvidables en la memoria. Abre tu corazón y tu alma a Extremadura y descubrirás una nueva profundidad e inspiración en tu vida.<br>
+    Los viajes a Extremadura despertarán en ti la sed de descubrimiento y aventura. Sin duda, tendrás que superar tus límites, pero son precisamente esos momentos los que dejan impresiones inolvidables en la memoria. Abre tu corazón y tu alma a Extremadura y descubrirás una nueva profundidad e inspiración en tu vida.<br>
 
-      ¡Vamos a buscar de nuevos mundos y revelaciones en España!
-              </p>
-            </div>
+    ¡Vamos a buscar de nuevos mundos y revelaciones en España!
+            </p>
           </div>
-        </section>
-        `;
-    } 
-    else if (hash === 'gallery') {
+        </div>
+      </section>
+      `;
+
+    } else if (hash === 'gallery') {
       loadGallery();
     } else if (hash === 'admin') {
       if (isLoggedIn()) {
@@ -42,12 +41,12 @@ window.addEventListener('load', function () {
       content.innerHTML = '<h1>Welcome</h1><p>This is the homepage.</p>';
     }
   }
-  
-  // Загрузка галереи из файла JSON
+
+  // Загрузка страницы с галереей из файла JSON
   function loadGallery() {
     const xhr = new XMLHttpRequest();
     xhr.open('GET', 'gallery.json', true);
-    xhr.onload = function() {
+    xhr.onload = function () {
       if (xhr.status === 200) {
         const galleryData = JSON.parse(xhr.responseText);
         const content = document.getElementById('content');
@@ -65,26 +64,31 @@ window.addEventListener('load', function () {
              <p>${photo.description}</p>
             </div>`;
         }
-        
+
         content.innerHTML = galleryHTML;
+        //open popup function 
+        const photoElements = document.querySelectorAll('.photo');
+        photoElements.forEach(function (photoElement) {
+          photoElement.addEventListener('click', openPopup);
+        });
       }
     };
     xhr.send();
   }
 
-      // Открытие всплывающего окна. действие
-    function openPopup() {
-      const imageSrc = this.querySelector('img').src;
-      const imageName = this.querySelector('img').alt;
-      const popup = document.createElement('div');
-      popup.classList.add('popup');
-      popup.innerHTML = `
-          <div class="popup-content">
-            <img src="${imageSrc}" alt="Popup Image">
-            <h4>${imageName}</h4>
-            <button class="close-btn">Cerrar</button>
-          </div>
-        `;
+    // Открытие всплывающего окна. действие
+  function openPopup() {
+    const imageSrc = this.querySelector('img').src;
+    const imageNane = this.querySelector('img').alt;
+    const popup = document.createElement('div');
+    popup.classList.add('popup');
+    popup.innerHTML = `
+        <div class="popup-content">
+          <img src="${imageSrc}" alt="Popup Image">
+          <h3>${imageNane}</h3>
+          <button class="close-btn">Cerrar</button>
+        </div>
+      `;
     // Блокировка прокрутки страницы
     document.body.style.overflow = 'hidden';
 
@@ -118,92 +122,99 @@ window.addEventListener('load', function () {
       <h1>Admin</h1>
       <form id="addPhotoForm">
         <input type="file" name="image" accept="image/*" required>
+        <input type="text" name="name" placeholder="Name" required>
         <input type="text" name="description" placeholder="Description" required>
-        <button type="submit">Add Photo</button>
+        <button type="submit">Add new post</button>
       </form>
       <div id="photoList"></div>
     `;
-    
+
     const addPhotoForm = document.getElementById('addPhotoForm');
-    addPhotoForm.addEventListener('submit', function(event) {
+    addPhotoForm.addEventListener('submit', function (event) {
       event.preventDefault();
-      
+
       const imageInput = addPhotoForm.elements.image;
       const descriptionInput = addPhotoForm.elements.description;
-      
+      const imagenameInput = addPhotoForm.elements.name;
+
       const file = imageInput.files[0];
-      
+
       if (file) {
         const reader = new FileReader();
-        reader.onload = function(e) {
+        reader.onload = function (e) {
           const imageBase64 = e.target.result;
-          
+
           const newPhoto = {
             image: imageBase64,
-            description: descriptionInput.value
+            description: descriptionInput.value,
+            name: imagenameInput.value
           };
-          
+
           savePhoto(newPhoto);
           imageInput.value = '';
           descriptionInput.value = '';
+          imagenameInput.value = '';
         };
         reader.readAsDataURL(file);
       }
     });
-    
+
     loadPhotoList();
   }
-  
+
   // Сохранение фото в файл JSON
   function savePhoto(photo) {
     const xhr = new XMLHttpRequest();
     xhr.open('POST', 'savephoto.php', true);
     xhr.setRequestHeader('Content-Type', 'application/json');
-    xhr.onload = function() {
+    xhr.onload = function () {
       if (xhr.status === 200) {
         loadPhotoList();
       }
     };
     xhr.send(JSON.stringify(photo));
   }
-  
+
   // Загрузка списка фото на странице Admin
   function loadPhotoList() {
     const xhr = new XMLHttpRequest();
     xhr.open('GET', 'gallery.json', true);
-    xhr.onload = function() {
+    xhr.onload = function () {
       if (xhr.status === 200) {
         const galleryData = JSON.parse(xhr.responseText);
         const photoList = document.getElementById('photoList');
-        
-        let photoListHTML = '<h2>Photo List</h2>';
-        for (let i = 0; i < galleryData.length; i++) {
+        let photoListHTML = '<h2>Post list</h2>';
+        photoListHTML += '<div class="gallery-row">';
+        // for (let i = 0; i < galleryData.length; i++) {
+        // Изменяем цикл для обратного порядка
+        for (let i = galleryData.length - 1; i >= 0; i--) {
           const photo = galleryData[i];
           photoListHTML += `
           <div class="photo">
           <img src="${photo.image}" alt="${photo.name}">
-          <h3>${photo.name}</h3>
+          <h2>${photo.name}</h2>
           <p>${photo.description}</p>
-          <button onclick="editDescription(${i})">Edit</button>
-          <button onclick="deletePhoto(${i})">Delete</button>
+          <button onclick="editName(${i})">Edit Name</button>
+          <button onclick="editDescription(${i})">Edit Description</button>
+          <button onclick="deletePhoto(${i})">Delete post</button>
           </div>
           `;
         }
-        
+
         photoList.innerHTML = photoListHTML;
       }
     };
     xhr.send();
   }
-  
+
   // Редактирование описания фото
-  window.editDescription = function(index) {
+  window.editDescription = function (index) {
     const description = prompt("Enter the new description:");
     if (description !== null) {
       const xhr = new XMLHttpRequest();
       xhr.open('POST', 'editdescription.php', true);
       xhr.setRequestHeader('Content-Type', 'application/json');
-      xhr.onload = function() {
+      xhr.onload = function () {
         if (xhr.status === 200) {
           loadPhotoList();
         }
@@ -211,18 +222,34 @@ window.addEventListener('load', function () {
       xhr.send(JSON.stringify({ index: index, description: description }));
     }
   }
-  
-    // Удаление фото на странице Admin
-    window.deletePhoto = function(index) {
-      const confirmDelete = confirm("Are you sure you want to delete this photo?");
-      if (!confirmDelete) {
-        return;
-      }
-    
+
+  // Редактирование имени фото
+  window.editName = function (index) {
+    const name = prompt("Enter the new name:");
+    if (name !== null) {
+      const xhr = new XMLHttpRequest();
+      xhr.open('POST', 'editname.php', true);
+      xhr.setRequestHeader('Content-Type', 'application/json');
+      xhr.onload = function () {
+        if (xhr.status === 200) {
+          loadPhotoList();
+        }
+      };
+      xhr.send(JSON.stringify({ index: index, name: name }));
+    }
+  }
+
+  // Удаление фото на странице Admin
+  window.deletePhoto = function (index) {
+    const confirmDelete = confirm("Are you sure you want to delete this post?");
+    if (!confirmDelete) {
+      return;
+    }
+
     const xhr = new XMLHttpRequest();
     xhr.open('POST', 'deletephoto.php', true);
     xhr.setRequestHeader('Content-Type', 'application/json');
-    xhr.onload = function() {
+    xhr.onload = function () {
       if (xhr.status === 200) {
         loadPhotoList();
       }
@@ -230,7 +257,6 @@ window.addEventListener('load', function () {
     xhr.send(JSON.stringify({ index: index }));
   }
 
-  
   // Показать форму входа
   function showLoginForm() {
     const content = document.getElementById('content');
@@ -242,30 +268,30 @@ window.addEventListener('load', function () {
         <button type="submit">Log In</button>
       </form>
     `;
-    
+
     const loginForm = document.getElementById('loginForm');
-    loginForm.addEventListener('submit', function(event) {
+    loginForm.addEventListener('submit', function (event) {
       event.preventDefault();
-      
+
       const usernameInput = loginForm.elements.username;
       const passwordInput = loginForm.elements.password;
-      
+
       if (login(usernameInput.value, passwordInput.value)) {
         loadAdmin();
       } else {
         alert('Invalid username or password');
       }
-      
+
       usernameInput.value = '';
       passwordInput.value = '';
     });
   }
-  
+
   // Проверка авторизации
   function isLoggedIn() {
     return localStorage.getItem('loggedIn') === 'true';
   }
-  
+
   // Вход в систему
   function login(username, password) {
     // Простая проверка, здесь нужно использовать безопасный механизм аутентификации
@@ -273,24 +299,24 @@ window.addEventListener('load', function () {
       localStorage.setItem('loggedIn', 'true');
       return true;
     }
-    
+
     return false;
   }
-  
+
   // Выход из системы
   function logout() {
     localStorage.setItem('loggedIn', 'false');
     window.location.hash = '';
   }
-  
+
   // Обработка изменений хэша в URL
   window.addEventListener('hashchange', loadContent);
-  
+
   // Инициализация загрузки контента
   loadContent();
 });
 
-  // Кнопка вверх для прокрутки страницы сайта в начало
+// Кнопка вверх для прокрутки страницы сайта в начало
   const btnUp = {
     el: document.querySelector('.btn-up'),
     show() {
@@ -318,64 +344,20 @@ window.addEventListener('load', function () {
           behavior: 'smooth'
         });
       }
-      
-      galleryHTML += '</div>';
-      
-      content.innerHTML = galleryHTML;
     }
-  };
-  xhr.send();
-  // }
-
-    // Открытие всплывающего окна с увеличенным фото
-    window.openPopup = function(imageSrc, description) {
-      const popup = document.createElement('div');
-      popup.classList.add('popup');
-      
-      const popupContent = document.createElement('div');
-      popupContent.classList.add('popup-content');
-      
-      const image = document.createElement('img');
-      image.src = imageSrc;
-      
-      const caption = document.createElement('p');
-      caption.textContent = description;
-      
-      popupContent.appendChild(image);
-      popupContent.appendChild(caption);
-      popup.appendChild(popupContent);
-      
-      popup.addEventListener('click', function(e) {
-        if (e.target === popup) {
-          closePopup();
-        }
-      });
-    
-    document.body.appendChild(popup);
-    
-    // Блокируем скроллинг фона при открытом всплывающем окне
-    document.body.style.overflow = 'hidden';
   }
 
-  // Закрытие всплывающего окна
-  window.closePopup = function() {
-    const popup = document.querySelector('.popup');
-    if (popup) {
-      popup.parentNode.removeChild(popup);
-    }
-    
-    // Разблокируем скроллинг фона
-    document.body.style.overflow = 'auto';
-  }
+  btnUp.addEventListener();
 
-  // Обработка события изменения хэша в URL
-  window.addEventListener('hashchange', function() {
-    const hash = window.location.hash.substr(1);
-    
-    switch (hash) {
-      case 'gallery':
-        loadGalleryPage();
-        break;
-      // Добавьте обработку других страниц, если необходимо
-    }
-  });
+//прогресс бар
+  let line = document.getElementById('progress_line');
+  window.addEventListener('scroll', progressBar);
+        
+  function progressBar(e) {
+    let windowScroll = document.body.scrollTop || 
+    document.documentElement.scrollTop;
+    let windowHeight = document.documentElement.scrollHeight - 
+    document.documentElement.clientHeight; 
+    let width_progress_line = windowScroll / windowHeight * 100;
+    line.style.width = width_progress_line + '%';
+  }
