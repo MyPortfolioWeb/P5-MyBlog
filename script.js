@@ -14,15 +14,6 @@ window.addEventListener('load', function () {
         <img src="img/mi photo.png" alt="Author Photo" class="author-photo">
         <div class="author-details">
           <p>
-          ¿Has experimentado alguna vez la sensación de descubrir mundos desconocidos y la libertad que traen consigo? Cuando abrimos las puertas a nuevos lugares, nos encontramos con aventuras increíbles, belleza incomparable y una historia profunda. En ese espíritu, te invito a embarcarte en un emocionante viaje a la provincia de Extremadura, ubicada en el suroeste de España.<br>
-
-    Extremadura es una joya que muchos aún desconocen. Adéntrate valientemente en sus antiguas calles, donde cada piedra está impregnada de historia y cultura. Te esperan castillos, ruinas misteriosas y paisajes pintorescos que inspirarán tu alma.<br>
-
-    ¿Y qué hay de los descubrimientos culinarios? Extremadura es famosa por su gastronomía, y no puedes dejar de probar sus exquisitos platos. Los deliciosos quesos, el famoso jamón ibérico y los vinos locales son auténticos manjares.<br>
-
-    Los viajes a Extremadura despertarán en ti la sed de descubrimiento y aventura. Sin duda, tendrás que superar tus límites, pero son precisamente esos momentos los que dejan impresiones inolvidables en la memoria. Abre tu corazón y tu alma a Extremadura y descubrirás una nueva profundidad e inspiración en tu vida.<br>
-
-    ¡Vamos a buscar de nuevos mundos y revelaciones en España!
             </p>
           </div>
         </div>
@@ -53,67 +44,72 @@ window.addEventListener('load', function () {
         
         let galleryHTML = '<h1>Galería</h1>';
         galleryHTML += '<div class="gallery-row">';
-        // for (let i = 0; i < galleryData.length; i++) {
-        // Изменяем цикл для обратного порядка
-        for (let i = galleryData.length - 1; i >= 0; i--) {
-          const photo = galleryData[i];
+
+        for (let i = galleryData.photos.length - 1; i >= 0; i--) {
+          const photo = galleryData.photos[i];
           galleryHTML += `
             <div class="photo">
-            <img src="${photo.image}" alt="${photo.name}">
-            <h3>${photo.name}</h3>
-             <p>${photo.description}</p>
+              <img src="${photo.image}" alt="${photo.name}">
+              <h3>${photo.name}</h3>
+              <p>${photo.description}</p>
             </div>`;
         }
 
+        galleryHTML += '</div>';
         content.innerHTML = galleryHTML;
-        //open popup function 
+        
+        // Открытие всплывающего окна
         const photoElements = document.querySelectorAll('.photo');
-        photoElements.forEach(function (photoElement) {
-          photoElement.addEventListener('click', openPopup);
+        photoElements.forEach(function (photoElement, index) {
+          photoElement.addEventListener('click', function () {
+            openPopup(index, galleryData.photos);
+          });
         });
       }
     };
     xhr.send();
   }
 
-    // Открытие всплывающего окна. действие
-  function openPopup() {
-    const imageSrc = this.querySelector('img').src;
-    const imageNane = this.querySelector('img').alt;
+  function openPopup(index, photos) {
+    const photo = photos[index];
+    const imageSrc = photo.image;
+    const imageName = photo.name;
     const popup = document.createElement('div');
     popup.classList.add('popup');
     popup.innerHTML = `
-        <div class="popup-content">
-          <img src="${imageSrc}" alt="Popup Image">
-          <h3>${imageNane}</h3>
-          <button class="close-btn">Cerrar</button>
-        </div>
-      `;
+      <div class="popup-content">
+        <img src="${imageSrc}" alt="Popup Image">
+        <h3>${imageName}</h3>
+        <button class="close-btn">Cerrar</button>
+      </div>
+    `;
+  
     // Блокировка прокрутки страницы
     document.body.style.overflow = 'hidden';
-
+  
     // Закрытие всплывающего окна при клике на Close
     const closeBtn = popup.querySelector('.close-btn');
     closeBtn.addEventListener('click', function () {
       document.body.removeChild(popup);
-
+  
       // Разблокировка прокрутки страницы
       document.body.style.overflow = 'auto';
     });
-
+  
     // Закрытие всплывающего окна при клике на окно
     popup.addEventListener('click', function (event) {
       // Проверяем, что клик был на самом окне, а не внутри его содержимого
       if (event.target === popup) {
         document.body.removeChild(popup);
-
+  
         // Разблокировка прокрутки страницы
         document.body.style.overflow = 'auto';
       }
     });
-
+  
     document.body.appendChild(popup);
   }
+  
 
   // Загрузка страницы Admin
   function loadAdmin() {
@@ -146,21 +142,21 @@ window.addEventListener('load', function () {
 
           const newPhoto = {
             image: imageBase64,
-            description: descriptionInput.value,
-            name: imagenameInput.value
+            name: imagenameInput.value,
+            description: descriptionInput.value
           };
 
           savePhoto(newPhoto);
           imageInput.value = '';
-          descriptionInput.value = '';
           imagenameInput.value = '';
+          descriptionInput.value = '';
         };
         reader.readAsDataURL(file);
       }
     });
 
-    loadPhotoList();
-  }
+  loadPhotoList();
+}
 
   // Сохранение фото в файл JSON
   function savePhoto(photo) {
@@ -172,7 +168,17 @@ window.addEventListener('load', function () {
         loadPhotoList();
       }
     };
-    xhr.send(JSON.stringify(photo));
+
+    const xhr2 = new XMLHttpRequest();
+    xhr2.open('GET', 'gallery.json', true);
+    xhr2.onload = function () {
+      if (xhr2.status === 200) {
+        const galleryData = JSON.parse(xhr2.responseText);
+        galleryData.photos.push(photo); // Добавляем новую фотографию в массив photos
+        xhr.send(JSON.stringify(galleryData));
+      }
+    };
+    xhr2.send();
   }
 
   // Загрузка списка фото на странице Admin
@@ -185,19 +191,18 @@ window.addEventListener('load', function () {
         const photoList = document.getElementById('photoList');
         let photoListHTML = '<h2>Post list</h2>';
         photoListHTML += '<div class="gallery-row">';
-        // for (let i = 0; i < galleryData.length; i++) {
-        // Изменяем цикл для обратного порядка
-        for (let i = galleryData.length - 1; i >= 0; i--) {
-          const photo = galleryData[i];
+
+        for (let i = galleryData.photos.length - 1; i >= 0; i--) {
+          const photo = galleryData.photos[i];
           photoListHTML += `
-          <div class="photo">
-          <img src="${photo.image}" alt="${photo.name}">
-          <h2>${photo.name}</h2>
-          <p>${photo.description}</p>
-          <button onclick="editName(${i})">Edit Name</button>
-          <button onclick="editDescription(${i})">Edit Description</button>
-          <button onclick="deletePhoto(${i})">Delete post</button>
-          </div>
+            <div class="photo">
+              <img src="${photo.image}" alt="${photo.name}">
+              <h2>${photo.name}</h2>
+              <p>${photo.description}</p>
+              <button onclick="editName(${i})">Edit Name</button>
+              <button onclick="editDescription(${i})">Edit Description</button>
+              <button onclick="deletePhoto(${i})">Delete post</button>
+            </div>
           `;
         }
 
@@ -205,22 +210,6 @@ window.addEventListener('load', function () {
       }
     };
     xhr.send();
-  }
-
-  // Редактирование описания фото
-  window.editDescription = function (index) {
-    const description = prompt("Enter the new description:");
-    if (description !== null) {
-      const xhr = new XMLHttpRequest();
-      xhr.open('POST', 'editdescription.php', true);
-      xhr.setRequestHeader('Content-Type', 'application/json');
-      xhr.onload = function () {
-        if (xhr.status === 200) {
-          loadPhotoList();
-        }
-      };
-      xhr.send(JSON.stringify({ index: index, description: description }));
-    }
   }
 
   // Редактирование имени фото
@@ -235,7 +224,43 @@ window.addEventListener('load', function () {
           loadPhotoList();
         }
       };
-      xhr.send(JSON.stringify({ index: index, name: name }));
+
+      const data = {
+        photos: [
+          {
+            index: index,
+            name: name
+          }
+        ]
+      };
+      xhr.send(JSON.stringify(data));
+    }
+  };
+
+  // Редактирование описания фото
+  window.editDescription = function (index) {
+    const description = prompt("Enter the new description:");
+    if (description !== null) {
+      const xhr = new XMLHttpRequest();
+      xhr.open('POST', 'editdescription.php', true);
+      xhr.setRequestHeader('Content-Type', 'application/json');
+      xhr.onload = function () {
+        if (xhr.status === 200) {
+          loadPhotoList();
+        }
+      };
+
+      const data = {
+        photos: [
+          {
+            index: index,
+            description: description
+          }
+        ]
+      };
+
+      xhr.send(JSON.stringify(data));
+      console.log(data);
     }
   }
 
@@ -254,7 +279,12 @@ window.addEventListener('load', function () {
         loadPhotoList();
       }
     };
-    xhr.send(JSON.stringify({ index: index }));
+
+    const data = {
+      index: index
+    };
+
+    xhr.send(JSON.stringify(data));
   }
 
   // Показать форму входа

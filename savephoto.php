@@ -3,12 +3,16 @@ $data = file_get_contents('php://input');
 $photo = json_decode($data);
 
 if ($photo) {
-  $galleryData = json_decode(file_get_contents('gallery.json'));
-  $galleryData[] = $photo;
-  
+  $galleryData = json_decode(file_get_contents('gallery.json'), true);
+  // $galleryData['photos'][] = $photo;
+  $galleryData = $photo;
+
   file_put_contents('gallery.json', json_encode($galleryData));
 }
 ?>
+
+
+
 
 
 <!-- $data = file_get_contents('php://input');
