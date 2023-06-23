@@ -88,33 +88,37 @@ header {
     background: rgb(232, 44, 27);
 }
 
-  .logo {
+.logo {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(10%, -30%);
-    width: 10pv;
-    height:80px;
+    height: 50pt;
   }
 
   .search-box {
     border-radius: 10px;
+    margin-left: 15%;
   }
 
   .about-section {
   font-style: italic;
+  flex-wrap: wrap;
+  max-width: 800px; /* Подстройте это значение в зависимости от ширины вашей фотографии */
+  display: flex;
+  margin: 0 auto; /* Добавьте эту строку */
+
   }
   .author-photo {
     max-width: 800px;
     height: auto;
-    /* height: 30%; */
   }
 
-  .author-details p {
-    /* height: 30%; */
-    text-align: left;
+  .about-section p {
     font-style: italic;
     text-indent: 25px;
+    line-height: 1.5;
+    text-align: justify;
   }
 
   main {
@@ -150,8 +154,6 @@ header {
     display: block;
   }
 
-
-
   .gallery-row .photo {
     max-width: 100%;
     /* width: 500px; */
@@ -176,10 +178,46 @@ header {
     font-family: Caveat;
     font-size: 1.6rem; 
   }
+
+  .login-container {
+    width: 300px;
+    margin: 100px auto;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+  }
   
+  form input[type="text"],
+  form input[type="password"] {
+  width: 90%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
   form input,
   form button {
-    margin: 5px;
+    /* margin: 5px; */
+
+    background-color:  #e4e3e3;
+    color: #000;
+    border: none;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin-top: 10px;
+    cursor: pointer;
+    border-radius: 4px;
+  }
+
+  form button:hover {
+    background-color: #45a049;
   }
 
   /*popup*/
@@ -274,14 +312,16 @@ header {
   .author-info img {
     max-width: 100%;
   }
-  .photo img {
-    max-width: 100%;
+
+  .gallery-row .photo {
+    width: 100%;
+    flex: 0 0 100%;
   }
 
   /* HEADER */
   .show-menu,
   .hide-menu {
-      display: block;
+  display: block;
   }
 
   .menu {

@@ -9,20 +9,16 @@ window.addEventListener('load', function () {
     if (hash === 'about') {
       content.innerHTML = `
       <section class="about-section">
-      <h2>Bienvenido, soy Slava y me gustaría enseñarte algo...</h2>
-      <div class="author-info">
-        <img src="img/mi photo.png" alt="Author Photo" class="author-photo">
-        <div class="author-details">
-          <p>
-          ¿Has experimentado alguna vez la sensación de descubrir mundos desconocidos y la libertad que traen consigo? Cuando abrimos las puertas a nuevos lugares, nos encontramos con aventuras increíbles, belleza incomparable y una historia profunda. En ese espíritu, te invito a embarcarte en un emocionante viaje a la provincia de Extremadura, ubicada en el suroeste de España.<br>
-
-    Extremadura es una joya que muchos aún desconocen. Adéntrate valientemente en sus antiguas calles, donde cada piedra está impregnada de historia y cultura. Te esperan castillos, ruinas misteriosas y paisajes pintorescos que inspirarán tu alma.<br>
-
-    ¿Y qué hay de los descubrimientos culinarios? Extremadura es famosa por su gastronomía, y no puedes dejar de probar sus exquisitos platos. Los deliciosos quesos, el famoso jamón ibérico y los vinos locales son auténticos manjares.<br>
-
-    Los viajes a Extremadura despertarán en ti la sed de descubrimiento y aventura. Sin duda, tendrás que superar tus límites, pero son precisamente esos momentos los que dejan impresiones inolvidables en la memoria. Abre tu corazón y tu alma a Extremadura y descubrirás una nueva profundidad e inspiración en tu vida.<br>
-
-    ¡Vamos a buscar de nuevos mundos y revelaciones en España!
+        <h2>Bienvenido, soy Slava, y me gustaría enseñarte algo...</h2>
+        <div class="author-info">
+          <img src="img/mi photo.png" alt="Author Photo" class="author-photo">
+          
+            <p>
+            ¿Has experimentado alguna vez la sensación de descubrir mundos desconocidos y la libertad que traen consigo? Cuando abrimos las puertas a nuevos lugares, nos encontramos con aventuras increíbles, belleza incomparable y una historia profunda. En ese espíritu, te invito a embarcarte en un emocionante viaje a la provincia de Extremadura, ubicada en el suroeste de España.<br>
+            Extremadura es una joya que muchos aún desconocen. Adéntrate valientemente en sus antiguas calles, donde cada piedra está impregnada de historia y cultura. Te esperan castillos, ruinas misteriosas y paisajes pintorescos que inspirarán tu alma.<br>
+            ¿Y qué hay de los descubrimientos culinarios? Extremadura es famosa por su gastronomía, y no puedes dejar de probar sus exquisitos platos. Los deliciosos quesos, el famoso jamón ibérico y los vinos locales son auténticos manjares.<br>
+            Los viajes a Extremadura despertarán en ti la sed de descubrimiento y aventura. Sin duda, tendrás que superar tus límites, pero son precisamente esos momentos los que dejan impresiones inolvidables en la memoria. Abre tu corazón y tu alma a Extremadura y descubrirás una nueva profundidad e inspiración en tu vida.<br>
+            ¡Vamos a buscar de nuevos mundos y revelaciones en España!
             </p>
           </div>
         </div>
@@ -51,7 +47,7 @@ window.addEventListener('load', function () {
         const galleryData = JSON.parse(xhr.responseText);
         const content = document.getElementById('content');
         
-        let galleryHTML = '<h1>Galería</h1>';
+        let galleryHTML = '<h2>"Extremadura: ¡Descubre nuevas fronteras y aventuras!"</h2>';
         galleryHTML += '<div class="gallery-row">';
         // for (let i = 0; i < galleryData.length; i++) {
         // Изменяем цикл для обратного порядка
@@ -192,7 +188,7 @@ window.addEventListener('load', function () {
           photoListHTML += `
           <div class="photo">
           <img src="${photo.image}" alt="${photo.name}">
-          <h2>${photo.name}</h2>
+          <h3>${photo.name}</h3>
           <p>${photo.description}</p>
           <button onclick="editName(${i})">Edit Name</button>
           <button onclick="editDescription(${i})">Edit Description</button>
@@ -262,6 +258,7 @@ window.addEventListener('load', function () {
     const content = document.getElementById('content');
     content.innerHTML = `
       <h1>Admin Login</h1>
+      <div class="login-container">
       <form id="loginForm">
         <input type="text" name="username" placeholder="Username" required>
         <input type="password" name="password" placeholder="Password" required>
