@@ -14,6 +14,7 @@ window.addEventListener('load', function () {
         <img src="img/mi photo.png" alt="Author Photo" class="author-photo">
         <div class="author-details">
           <p>
+          bla bla bla...
             </p>
           </div>
         </div>
@@ -33,85 +34,7 @@ window.addEventListener('load', function () {
     }
   }
 
-  // Загрузка страницы с галереей из файла JSON
-  function loadGallery() {
-    const xhr = new XMLHttpRequest();
-    xhr.open('GET', 'gallery.json', true);
-    xhr.onload = function () {
-      if (xhr.status === 200) {
-        const galleryData = JSON.parse(xhr.responseText);
-        const content = document.getElementById('content');
-        
-        let galleryHTML = '<h1>Galería</h1>';
-        galleryHTML += '<div class="gallery-row">';
-
-        for (let i = galleryData.photos.length - 1; i >= 0; i--) {
-          const photo = galleryData.photos[i];
-          galleryHTML += `
-            <div class="photo">
-              <img src="${photo.image}" alt="${photo.name}">
-              <h3>${photo.name}</h3>
-              <p>${photo.description}</p>
-            </div>`;
-        }
-
-        galleryHTML += '</div>';
-        content.innerHTML = galleryHTML;
-        
-        // Открытие всплывающего окна
-        const photoElements = document.querySelectorAll('.photo');
-        photoElements.forEach(function (photoElement, index) {
-          photoElement.addEventListener('click', function () {
-            openPopup(index, galleryData.photos);
-          });
-        });
-      }
-    };
-    xhr.send();
-  }
-
-  function openPopup(index, photos) {
-    const photo = photos[index];
-    const imageSrc = photo.image;
-    const imageName = photo.name;
-    const popup = document.createElement('div');
-    popup.classList.add('popup');
-    popup.innerHTML = `
-      <div class="popup-content">
-        <img src="${imageSrc}" alt="Popup Image">
-        <h3>${imageName}</h3>
-        <button class="close-btn">Cerrar</button>
-      </div>
-    `;
-  
-    // Блокировка прокрутки страницы
-    document.body.style.overflow = 'hidden';
-  
-    // Закрытие всплывающего окна при клике на Close
-    const closeBtn = popup.querySelector('.close-btn');
-    closeBtn.addEventListener('click', function () {
-      document.body.removeChild(popup);
-  
-      // Разблокировка прокрутки страницы
-      document.body.style.overflow = 'auto';
-    });
-  
-    // Закрытие всплывающего окна при клике на окно
-    popup.addEventListener('click', function (event) {
-      // Проверяем, что клик был на самом окне, а не внутри его содержимого
-      if (event.target === popup) {
-        document.body.removeChild(popup);
-  
-        // Разблокировка прокрутки страницы
-        document.body.style.overflow = 'auto';
-      }
-    });
-  
-    document.body.appendChild(popup);
-  }
-  
-
-  // Загрузка страницы Admin
+   // Загрузка страницы Admin
   function loadAdmin() {
     const content = document.getElementById('content');
     content.innerHTML = `
@@ -140,13 +63,18 @@ window.addEventListener('load', function () {
         reader.onload = function (e) {
           const imageBase64 = e.target.result;
 
+          const galleryData = getGalleryData();
+          const imageid = galleryData.photos.length.toString();
+
           const newPhoto = {
+            id: imageid,
             image: imageBase64,
             name: imagenameInput.value,
             description: descriptionInput.value
           };
 
           savePhoto(newPhoto);
+          imageid.value = '';
           imageInput.value = '';
           imagenameInput.value = '';
           descriptionInput.value = '';
@@ -155,11 +83,133 @@ window.addEventListener('load', function () {
       }
     });
 
-  loadPhotoList();
-}
+    loadPhotoList();
+  }
+
+    // Загрузка страницы с галереей из файла JSON
+  function loadGallery() {
+    const xhr = new XMLHttpRequest();
+    xhr.open('GET', 'gallery.json', true)
+    xhr.onload = function () {
+      if (xhr.status === 200) {
+        const galleryData = JSON.parse(xhr.responseText);
+        const content = document.getElementById('content');
+
+        // let galleryHTML = '<h1>Galería</h1>';
+        // galleryHTML += '<div class="gallery-row">';
+
+        // for (let i = galleryData.photos.length - 1; i >= 0; i--) {
+        //   const photo = galleryData.photos[i];
+        //   galleryHTML += `
+        //   <div class="photo">
+        //     <img src="${photo.image}" alt="${photo.name}" onclick="openPopupImage('${photo.image}')">
+        //     <h3>${photo.name}</h3>
+        //     <p>${photo.description}</p>
+        //   </div>`;
+        // }
+
+        // galleryHTML += '</div>';
+        // content.innerHTML = galleryHTML;
+
+        let mainContent = document.getElementById('content');
+
+        let galleryContainer = document.createElement('div');
+        let galleryTitle = document.createElement('h1');
+        galleryTitle.textContent = 'Galería';
+        galleryContainer.appendChild(galleryTitle);
+        
+        let galleryRow = document.createElement('div');
+        galleryRow.classList.add('gallery-row');
+        
+        for (let i = galleryData.photos.length - 1; i >= 0; i--) {
+          const photo = galleryData.photos[i];
+          
+          let photoContainer = document.createElement('div');
+          photoContainer.classList.add('photo');
+          
+          let image = document.createElement('img');
+          image.src = photo.image;
+          image.alt = photo.name;
+          image.addEventListener('click', function() {
+            openPopupImage(photo.image);
+          });
+          photoContainer.appendChild(image);
+          
+          let name = document.createElement('h3');
+          name.textContent = photo.name;
+          photoContainer.appendChild(name);
+          
+          let description = document.createElement('p');
+          description.textContent = photo.description;
+          photoContainer.appendChild(description);
+          
+          galleryRow.appendChild(photoContainer);
+        }
+        
+        galleryContainer.appendChild(galleryRow);
+        mainContent.appendChild(galleryContainer);
+        
+
+
+
+      }
+    };
+    xhr.send();
+  }
+  function openPopupImage(imageSrc) {
+    const popupOverlay = document.createElement('div');
+    popupOverlay.classList.add('popup-overlay');
+  
+    const popupContent = document.createElement('div');
+    popupContent.classList.add('popup-content');
+  
+    const popupImage = document.createElement('img');
+    popupImage.src = imageSrc;
+  
+    const closeButton = document.createElement('span');
+    closeButton.innerHTML = '&#x2716;'; // Знак "✖"
+    closeButton.classList.add('popup-close');
+    closeButton.addEventListener('click', function () {
+      popupOverlay.remove();
+    });
+  
+    popupContent.appendChild(popupImage);
+    popupContent.appendChild(closeButton);
+  
+    popupOverlay.appendChild(popupContent);
+  
+    document.body.appendChild(popupOverlay);
+  }
+
+
+
+    // Получение данных галереи из файла JSON
+    function getGalleryData() {
+      const xhr = new XMLHttpRequest();
+      xhr.open('GET', 'gallery.json', false);
+      xhr.send();
+  
+      if (xhr.status === 200) {
+        return JSON.parse(xhr.responseText);
+      } else {
+        return { photos: [] };
+      }
+    }
 
   // Сохранение фото в файл JSON
   function savePhoto(photo) {
+    const galleryData = getGalleryData();
+    const id = galleryData.photos.length.toString();
+
+    const newPhoto = {
+      id: photo.id,
+      image: photo.image,
+      name: photo.name,
+      description: photo.description
+    };
+
+    galleryData.photos.push(newPhoto);
+
     const xhr = new XMLHttpRequest();
     xhr.open('POST', 'savephoto.php', true);
     xhr.setRequestHeader('Content-Type', 'application/json');
@@ -168,48 +218,31 @@ window.addEventListener('load', function () {
         loadPhotoList();
       }
     };
-
-    const xhr2 = new XMLHttpRequest();
-    xhr2.open('GET', 'gallery.json', true);
-    xhr2.onload = function () {
-      if (xhr2.status === 200) {
-        const galleryData = JSON.parse(xhr2.responseText);
-        galleryData.photos.push(photo); // Добавляем новую фотографию в массив photos
-        xhr.send(JSON.stringify(galleryData));
-      }
-    };
-    xhr2.send();
+    xhr.send(JSON.stringify(galleryData));
   }
 
   // Загрузка списка фото на странице Admin
   function loadPhotoList() {
-    const xhr = new XMLHttpRequest();
-    xhr.open('GET', 'gallery.json', true);
-    xhr.onload = function () {
-      if (xhr.status === 200) {
-        const galleryData = JSON.parse(xhr.responseText);
-        const photoList = document.getElementById('photoList');
-        let photoListHTML = '<h2>Post list</h2>';
-        photoListHTML += '<div class="gallery-row">';
+    const galleryData = getGalleryData();
+    const photoList = document.getElementById('photoList');
+    let photoListHTML = '<h2>Post list</h2>';
+    photoListHTML += '<div class="gallery-row">';
 
-        for (let i = galleryData.photos.length - 1; i >= 0; i--) {
-          const photo = galleryData.photos[i];
-          photoListHTML += `
-            <div class="photo">
-              <img src="${photo.image}" alt="${photo.name}">
-              <h2>${photo.name}</h2>
-              <p>${photo.description}</p>
-              <button onclick="editName(${i})">Edit Name</button>
-              <button onclick="editDescription(${i})">Edit Description</button>
-              <button onclick="deletePhoto(${i})">Delete post</button>
-            </div>
-          `;
-        }
+    for (let i = galleryData.photos.length - 1; i >= 0; i--) {
+      const photo = galleryData.photos[i];
+      photoListHTML += `
+        <div class="photo">
+          <img src="${photo.image}" alt="${photo.name}">
+          <h2>id=${photo.id},${photo.name}</h2>
+          <p>${photo.description}</p>
+          <button onclick="editName(${i})">Edit Name</button>
+          <button onclick="editDescription(${i})">Edit Description</button>
+          <button onclick="deletePhoto(${i})">Delete post</button>
+        </div>
+      `;
+    }
 
-        photoList.innerHTML = photoListHTML;
-      }
-    };
-    xhr.send();
+    photoList.innerHTML = photoListHTML;
   }
 
   // Редактирование имени фото
@@ -226,12 +259,10 @@ window.addEventListener('load', function () {
       };
 
       const data = {
-        photos: [
-          {
-            index: index,
-            name: name
-          }
-        ]
+        photo: {
+          id: index.toString(),
+          name: name
+        }
       };
       xhr.send(JSON.stringify(data));
     }
@@ -251,18 +282,14 @@ window.addEventListener('load', function () {
       };
 
       const data = {
-        photos: [
-          {
-            index: index,
-            description: description
-          }
-        ]
+        photo: {
+          id: index.toString(),
+          description: description
+        }
       };
-
       xhr.send(JSON.stringify(data));
-      console.log(data);
     }
-  }
+  };
 
   // Удаление фото на странице Admin
   window.deletePhoto = function (index) {
@@ -285,7 +312,7 @@ window.addEventListener('load', function () {
     };
 
     xhr.send(JSON.stringify(data));
-  }
+  };
 
   // Показать форму входа
   function showLoginForm() {
@@ -345,49 +372,3 @@ window.addEventListener('load', function () {
   // Инициализация загрузки контента
   loadContent();
 });
-
-// Кнопка вверх для прокрутки страницы сайта в начало
-  const btnUp = {
-    el: document.querySelector('.btn-up'),
-    show() {
-      // удалим у кнопки класс btn-up_hide
-      this.el.classList.remove('btn-up_hide');
-    },
-    hide() {
-      // добавим к кнопке класс btn-up_hide
-      this.el.classList.add('btn-up_hide');
-    },
-    addEventListener() {
-      // при прокрутке содержимого страницы
-      window.addEventListener('scroll', () => {
-        // определяем величину прокрутки
-        const scrollY = window.scrollY || document.documentElement.scrollTop;
-        // если страница прокручена больше чем на 400px, то делаем кнопку видимой, иначе скрываем
-        scrollY > 400 ? this.show() : this.hide();
-      });
-      // при нажатии на кнопку .btn-up
-      document.querySelector('.btn-up').onclick = () => {
-        // переместим в начало страницы
-        window.scrollTo({
-          top: 0,
-          left: 0,
-          behavior: 'smooth'
-        });
-      }
-    }
-  }
-
-  btnUp.addEventListener();
-
-//прогресс бар
-  let line = document.getElementById('progress_line');
-  window.addEventListener('scroll', progressBar);
-        
-  function progressBar(e) {
-    let windowScroll = document.body.scrollTop || 
-    document.documentElement.scrollTop;
-    let windowHeight = document.documentElement.scrollHeight - 
-    document.documentElement.clientHeight; 
-    let width_progress_line = windowScroll / windowHeight * 100;
-    line.style.width = width_progress_line + '%';
-  }
